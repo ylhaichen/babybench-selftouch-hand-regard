@@ -1,0 +1,43 @@
+Slide 1
+
+Hello, in this project I study how an infant-like robot can learn self-touch autonomously in simulation.
+
+I use the BabyBench platform and the MIMo infant model, and I train the policy with reinforcement learning using intrinsic rewards only. The main question is whether the robot can gradually discover its own body through self-generated exploration, without any external supervision.
+
+
+Slide 2
+
+The motivation for this project comes from developmental studies of infant self-touch.
+
+Thomas and colleagues showed that spontaneous self-touch appears very early in infancy and contributes to the development of body awareness and motor coordination. In other words, by moving and touching their own bodies, infants build a sensorimotor understanding of themselves.
+
+This idea motivates my project: instead of giving the robot an external task reward, I encourage it to explore its own body through intrinsic motivation.
+
+
+Slide 3
+
+My method uses tactile and proprioceptive observations as the main sensory inputs.
+
+Because the raw touch signal is very high-dimensional, I compress it into 68 grouped touch features and combine these with proprioceptive features inside the policy network. The reward is intrinsic and encourages novelty, new hand-body contacts, broader body coverage, milestone progress, and balanced exploration.
+
+For training, I use PPO and a three-stage curriculum: a base stage, a more difficult exploration stage with randomized initial joint states, and a final after-stage for refinement under a more standard setup.
+
+
+Slide 4
+
+This slide shows the training dynamics across the three stages.
+
+In the base stage, the policy learned stable self-contact behaviour, but the overall body coverage remained limited. In the difficult stage, the curriculum with randomized initial states greatly increased exploration and contact coverage. Finally, in the after-stage, the policy became more stable again under standard training conditions.
+
+So the main training takeaway is that curriculum improved exploration, while the final stage was important for selecting a model that works better under standard evaluation.
+
+
+Slide 5
+
+For the final result, I selected the after-stage model because it performed better under standard deterministic evaluation.
+
+In a 10-episode evaluation, the final policy achieved a cumulative manual self-touch score of about 0.22. The behaviour is still limited and far from full body coverage, but it clearly demonstrates autonomous self-exploration emerging from intrinsic motivation alone.
+
+Overall, this project supports the developmental robotics idea that body knowledge can emerge through self-generated interaction, while also showing that better representation learning and stronger generalization remain important future directions.
+
+Thank you.

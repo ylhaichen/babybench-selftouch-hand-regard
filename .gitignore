@@ -1,6 +1,14 @@
 # BabyBench files and directories
 results/*
 !results/__init__.py
+results_author_replica/**/stelios_x_giannis_ppo*.zip
+results_author_replica/**/vecnormalize.pkl
+results_author_replica/**/*.avi
+results_author_replica/**/*.zip
+results_author_replica/**/train.log
+results_author_replica/**/train.pid
+results_author_replica/**/selftouch_author_pipeline_controller.log
+results_author_replica/**/selftouch_author_pipeline_controller.pid
 test_installation.avi
 test/*
 test*
