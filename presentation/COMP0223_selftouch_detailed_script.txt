@@ -1,0 +1,61 @@
+Slide 1
+
+Hello, in this project I study how an infant-like robot can learn self-touch autonomously in simulation.
+
+I use the BabyBench platform and the MIMo infant model, and I train the policy with reinforcement learning using intrinsic rewards only. The core question is whether the robot can gradually discover its own body through self-generated exploration, without any external supervision.
+
+
+Slide 2
+
+The main motivation for this project comes from developmental studies of infant self-touch.
+
+Work by Thomas and colleagues shows that spontaneous self-touch appears very early in infancy. These actions are not externally instructed, but they generate exactly the kind of sensorimotor experience that can support learning. Each self-touch event combines movement information, or proprioception, with tactile information from physical contact.
+
+This is important because repeated self-touch is thought to contribute to body awareness and early sensorimotor development. In other words, infants do not just move randomly: through self-generated contact, they gradually learn something about their own bodies.
+
+
+Slide 3
+
+This is also why self-touch is a meaningful robotics problem.
+
+From a robotics perspective, self-touch provides a naturally multimodal and body-centered learning signal. It does not require labels, demonstrations, or a manually engineered task reward. That makes it a good test case for intrinsic-motivation reinforcement learning.
+
+BabyBench is particularly suitable here because it provides an infant-like embodiment, tactile and proprioceptive sensing, continuous motor control, and benchmarked evaluation. So it lets us translate a developmental idea into a concrete embodied learning experiment.
+
+
+Slide 4
+
+My implementation uses tactile and proprioceptive observations as the main inputs.
+
+Because the raw touch signal is very high-dimensional, I compress it into 68 grouped touch features and combine those with proprioceptive features inside the policy network. The reward is intrinsic and encourages novelty, new hand-body contacts, broader coverage of the body, milestone progress, and balanced exploration.
+
+For optimization, I use PPO. Training is organized into three stages: a base stage, a more difficult stage with randomized initial joint states for broader exploration, and a final after-stage used to refine and evaluate the policy more fairly under standard conditions.
+
+
+Slide 5
+
+This slide explains the algorithmic design more explicitly.
+
+At each step, the environment provides touch and proprioceptive observations. The touch signal is flattened and compressed into 68 grouped tactile features, while proprioception is processed as a separate input branch. The policy then outputs a continuous action through PPO.
+
+After the action is applied, the intrinsic-reward wrapper scans touch activation and MuJoCo contacts. It updates novelty, contact coverage, milestone, and balance statistics, and converts those statistics into the step reward used for learning. This means the full training loop is not just PPO alone, but PPO interacting with a reward-shaping wrapper that defines what counts as meaningful self-exploration.
+
+
+Slide 6
+
+This slide shows the training dynamics across the three stages.
+
+In the base stage, the policy learned stable self-contact behaviour, but overall body coverage remained limited. In the difficult stage, the curriculum with randomized initial states greatly increased exploratory contact during training. Finally, in the after-stage, the policy became more stable again under more standard conditions.
+
+So the key training takeaway is that curriculum improved exploration, but the final checkpoint still had to be selected by standard deterministic evaluation rather than by training statistics alone.
+
+
+Slide 7
+
+For the final result, I selected the after-stage model because it performed better under standard deterministic evaluation.
+
+In a 10-episode evaluation, the final policy achieved a cumulative manual self-touch score of about 0.22. This is still far from complete body coverage, but it clearly demonstrates autonomous self-exploration emerging from intrinsic motivation alone. It also performed better than the difficult-stage final model under the same evaluation setup.
+
+Overall, this project supports the developmental robotics idea that body knowledge can emerge through self-generated interaction, while also showing that representation learning and generalization remain important challenges for future work.
+
+Thank you.
